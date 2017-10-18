@@ -23,7 +23,7 @@ class ncbi_gff(object):
     
     @staticmethod
     def get_tr_longest_intron(tr_df):
-        '''get the longest intron the the transcript'''
+        '''get the longest intron in the transcript'''
         start = tr_df['start'].tolist()
         end = tr_df['end'].tolist()
         strand = tr_df['strand'].tolist()
@@ -73,7 +73,7 @@ class ncbi_gff(object):
     
     def get_gene_seq(self,ref_dic,gid,id_type='tr'):
         '''this function gets seqeunce of a transcript or protein
-        * ref_dic: 
+        * ref_dic: handle reads using SeqIO.index(fa,'fasta')
         * gid: gene id
         '''
         df = self.df
@@ -91,10 +91,7 @@ class ncbi_gff(object):
         
         g_seq = ''
         for s,e in zip(region_df['start'],region_df['end']):
-            if strand == '+':
-                g_seq += scaff_seq[int(s)-1:int(e)]
-            else:
-                g_seq = scaff_seq[int(s)-1:int(e)] + g_seq
+            g_seq += scaff_seq[int(s):int(e)]
         # consider strand
         if strand == '-':
             g_seq = g_seq.reverse_complement()
